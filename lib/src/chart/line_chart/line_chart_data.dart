@@ -1036,7 +1036,8 @@ class LineTouchTooltipData with EquatableMixin {
   /// Tooltip shows on top of spots, with [getTooltipColor] as a background color,
   /// and you can set corner radius using [tooltipRoundedRadius].
   /// If you want to have a padding inside the tooltip, fill [tooltipPadding],
-  /// or If you want to have a bottom margin, set [tooltipMargin].
+  /// or If you want to have vertical margin to touched spot, set [tooltipMargin]
+  /// and use [getTooltipVerticalAlignment] to position tooltip vertically.
   /// Content of the tooltip will provide using [getTooltipItems] callback, you can override it
   /// and pass your custom data to show in the tooltip.
   /// You can restrict the tooltip's width using [maxContentWidth].
@@ -1053,6 +1054,7 @@ class LineTouchTooltipData with EquatableMixin {
     this.maxContentWidth = 120,
     this.getTooltipItems = defaultLineTooltipItem,
     this.getTooltipColor = defaultLineTooltipColor,
+    this.getTooltipVerticalAlignment = defaultLineTooltipVerticalAlignment,
     this.fitInsideHorizontally = false,
     this.fitInsideVertically = false,
     this.showOnTopOfTheChartBoxArea = false,
@@ -1099,6 +1101,9 @@ class LineTouchTooltipData with EquatableMixin {
   // /// Retrieves data for setting background color of the tooltip.
   final GetLineTooltipColor getTooltipColor;
 
+  /// Retrieves data for setting vertical alignment of the tooltip.
+  final GetLineTooltipVerticalAlignment getTooltipVerticalAlignment;
+
   /// Used for equality check, see [EquatableMixin].
   @override
   List<Object?> get props => [
@@ -1115,7 +1120,23 @@ class LineTouchTooltipData with EquatableMixin {
         rotateAngle,
         tooltipBorder,
         getTooltipColor,
+        getTooltipVerticalAlignment,
       ];
+}
+
+//// Provides a [FLVerticalAlignment] to customize tooltip vertical alignment for each touched spot
+///
+/// You can override [LineTouchTooltipData.getTooltipVerticalAlignment], it gives you
+/// [touchedSpot] object that touch happened on, then you should pass your custom [FLVerticalAlignment]
+/// to set vertical alignment of tooltip popup.
+typedef GetLineTooltipVerticalAlignment = FLVerticalAlignment Function(
+  LineBarSpot touchedSpot,
+);
+
+/// Default implementation for [LineTouchTooltipData.getTooltipVerticalAlignment].
+FLVerticalAlignment defaultLineTooltipVerticalAlignment(
+    LineBarSpot touchedSpot) {
+  return FLVerticalAlignment.above;
 }
 
 /// Provides a [LineTooltipItem] for showing content inside the [LineTouchTooltipData].

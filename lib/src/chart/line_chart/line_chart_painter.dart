@@ -1047,6 +1047,13 @@ class LineChartPainter extends AxisChartPainter<LineChartData> {
       getPixelY(showOnSpot.y, viewSize, holder),
     );
 
+    var topSpot = showingTooltipSpots.showingSpots[0];
+    for (final barSpot in showingTooltipSpots.showingSpots) {
+      if (barSpot.y > topSpot.y) {
+        topSpot = barSpot;
+      }
+    }
+
     final tooltipWidth = biggerWidth + tooltipData.tooltipPadding.horizontal;
     final tooltipHeight = sumTextsHeight + tooltipData.tooltipPadding.vertical;
 
@@ -1054,8 +1061,16 @@ class LineChartPainter extends AxisChartPainter<LineChartData> {
     if (tooltipData.showOnTopOfTheChartBoxArea) {
       tooltipTopPosition = 0 - tooltipHeight - tooltipData.tooltipMargin;
     } else {
-      tooltipTopPosition =
-          mostTopOffset.dy - tooltipHeight - tooltipData.tooltipMargin;
+      switch (tooltipData.getTooltipVerticalAlignment(topSpot)) {
+        case FLVerticalAlignment.above:
+          tooltipTopPosition =
+              mostTopOffset.dy - tooltipHeight - tooltipData.tooltipMargin;
+        case FLVerticalAlignment.below:
+          tooltipTopPosition = mostTopOffset.dy + tooltipData.tooltipMargin;
+        case FLVerticalAlignment.center:
+          tooltipTopPosition =
+              mostTopOffset.dy - tooltipHeight / 2 + tooltipData.tooltipMargin;
+      }
     }
 
     final tooltipLeftPosition = getTooltipLeft(
@@ -1125,13 +1140,6 @@ class LineChartPainter extends AxisChartPainter<LineChartData> {
       bottomLeft: radius,
       bottomRight: radius,
     );
-
-    var topSpot = showingTooltipSpots.showingSpots[0];
-    for (final barSpot in showingTooltipSpots.showingSpots) {
-      if (barSpot.y > topSpot.y) {
-        topSpot = barSpot;
-      }
-    }
 
     _bgTouchTooltipPaint.color = tooltipData.getTooltipColor(topSpot);
 

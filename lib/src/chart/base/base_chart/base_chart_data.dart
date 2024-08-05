@@ -204,3 +204,15 @@ enum FLHorizontalAlignment {
   /// Element shown on the right side of the given point.
   right,
 }
+
+/// Controls an element vertical alignment to given point.
+enum FLVerticalAlignment {
+  /// Element shown vertically center aligned to a given point.
+  center,
+
+  /// Element shown above the given point.
+  above,
+
+  /// Element shown below the given point.
+  below,
+}

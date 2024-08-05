@@ -1135,7 +1135,8 @@ typedef GetLineTooltipVerticalAlignment = FLVerticalAlignment Function(
 
 /// Default implementation for [LineTouchTooltipData.getTooltipVerticalAlignment].
 FLVerticalAlignment defaultLineTooltipVerticalAlignment(
-    LineBarSpot touchedSpot) {
+  LineBarSpot touchedSpot,
+) {
   return FLVerticalAlignment.above;
 }
 
